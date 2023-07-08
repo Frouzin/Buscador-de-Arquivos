@@ -28,7 +28,7 @@ def find_by_mod(path,value):
     return [file for file in get_files(path) if datetime.fromtimestamp(file.stat().st_mtime >= datetime_obj)]
 
    
-"""[file for file in get_files(path) if file.is_file()]"""
+# [file for file in get_files(path) if file.is_file()]
 
 def timestamp_to_string(system_timestamp):
     datetime_obj = datetime.fromtimestamp(system_timestamp)
