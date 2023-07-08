@@ -1,8 +1,8 @@
 import click
 from pathlib import Path
-from utils import find_by_ext,find_by_name,find_by_mod,timestamp_to_string
+from utils import find_by_ext,find_by_name,find_by_mod,timestamp_to_string, get_folders
 
-def process_search(path, key, value):
+def process_search(path, key, value,recursive):
     search_mapping = {
         "name": find_by_name,
         "ext" : find_by_ext,
@@ -11,6 +11,14 @@ def process_search(path, key, value):
 
     files = search_mapping[key](path,value)
 
+    if recursive:
+        subdirs = get_folders(path)
+        for subdir in subdirs:
+            files += process_search(subdir, key, value, recursive)
+
+    return files
+
+def process_results(files, key, value):
     if not files:
             click.echo(f" Nenhum arquivo com o {key} {value} foi encontrado")
     else:
@@ -26,7 +34,10 @@ def process_search(path, key, value):
 @click.argument("path", default="")
 @click.option("-k","--key", required=True, type=click.Choice(["name","ext","mod"]))
 @click.option("-v", "--value",required=True)
-def finder(path, key, value):
+@click.option("-r","-recursive", is_flag=True, default=False)
+
+
+def finder(path, key, value,recursive):
 
     root = Path(path)
 
@@ -35,6 +46,7 @@ def finder(path, key, value):
 
     click.echo(f"O diretorio selecionado foi {root.absolute()}")
 
-    process_search(path=root, key=key, value=value)
+    files = process_search(path=root, key=key, value=value, recursive=recursive)
+    process_results(files=files, key=key, value=value)
 
 finder()

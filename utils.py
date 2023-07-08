@@ -1,6 +1,11 @@
 from datetime import datetime
 from exceptions import FileFinderError
 
+
+def get_folders(path):
+    """PUXA PASTAS DE UM DIRETORIO PESQUISADO"""
+    return [file for file in path.iterdir() if file.is_dir()]
+
 def get_files(path):
     """PUXA ARQUIVOS DE UM DIRETORIO PESQUISADO"""
     return [file for file in path.iterdir() if file.is_file()]
