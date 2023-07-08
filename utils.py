@@ -1,5 +1,5 @@
 from datetime import datetime
-from exceptions import FileFinderError
+from exceptions import InvalidInputError
 
 def get_folders(path):
     """PUXA PASTAS DE UM DIRETORIO PESQUISADO"""
@@ -23,7 +23,7 @@ def find_by_mod(path,value):
     try:
         datetime_obj = datetime.strptime(value, "%d/%m/%Y")
     except ValueError:
-        raise FileFinderError("Data Invalida!")
+        raise InvalidInputError(f"'{value}'não é uma data valida no formado dd/mm/aaaa!")
 
     return [file for file in get_files(path) if datetime.fromtimestamp(file.stat().st_mtime >= datetime_obj)]
 

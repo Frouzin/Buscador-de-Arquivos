@@ -5,6 +5,7 @@ from utils import  get_folders,get_files_details
 from datetime import datetime
 from tabulate import tabulate
 from constants import SEARCH_MAPPING, TABLE_HEADERS
+from exceptions import InvalidInputError, ZeroFilesFoundError,FileFinderError
 
 def process_search(path, key, value,recursive):
    
@@ -20,7 +21,7 @@ def process_search(path, key, value,recursive):
 
 def process_results(files, key, value):
     if not files:
-            click.echo(f" Nenhum arquivo com o {key} {value} foi encontrado")
+            raise ZeroFilesFoundError(f" Nenhum arquivo com o {key} {value} foi encontrado")
     else:
         table_data = get_files_details(files)
         tabulate_data = tabulate(tabular_data=table_data,headers=TABLE_HEADERS,tablefmt="tsv")
@@ -69,7 +70,7 @@ def finder(path, key, value,recursive, copy_to, save):
     root = Path(path)
 
     if not root.is_dir():
-        raise Exception("O caminho não é um diretorio!")
+        raise InvalidInputError(f"O caminho '{path}' não é um diretorio existente!")
 
     click.echo(f"O diretorio selecionado foi {root.absolute()}")
 
@@ -78,4 +79,7 @@ def finder(path, key, value,recursive, copy_to, save):
     save_report(save=save,report=report,root=root)
     copy_files(copy_to=copy_to,files=files)
 
-finder()
+try:
+    finder()
+except FileFinderError as err:
+    click.echo(click.style(err,bg='black',fg='red',italic=True))
