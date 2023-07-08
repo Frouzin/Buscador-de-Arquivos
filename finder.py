@@ -1,6 +1,6 @@
 import click
 from pathlib import Path
-from utils import find_by_ext,find_by_name,find_by_mod
+from utils import find_by_ext,find_by_name,find_by_mod,timestamp_to_string
 
 def process_search(path, key, value):
     search_mapping = {
@@ -17,13 +17,14 @@ def process_search(path, key, value):
         for f in files:
             click.echo(
                 f"Nome: {f.name}\n"
-                f"Data Modificacao: {f.stat().st_mtime}\n"
-                f"Localizacao: {root.absolute()}"
+                f"Data de Criacao: {timestamp_to_string(f.stat().st_ctime)}\n"
+                f"Data Modificacao: {timestamp_to_string(f.stat().st_mtime)}\n"
+                f"Localizacao: {f.parent.absolute()}"
                 )
 
 @click.command()
 @click.argument("path", default="")
-@click.option("-k","--key", required=True, type=click.Choice(["name","ext","modified"]))
+@click.option("-k","--key", required=True, type=click.Choice(["name","ext","mod"]))
 @click.option("-v", "--value",required=True)
 def finder(path, key, value):
 
