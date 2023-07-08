@@ -22,11 +22,11 @@ def process_search(path, key, value,recursive):
 def process_results(files, key, value):
     if not files:
             raise ZeroFilesFoundError(f" Nenhum arquivo com o {key} {value} foi encontrado")
-    else:
-        table_data = get_files_details(files)
-        tabulate_data = tabulate(tabular_data=table_data,headers=TABLE_HEADERS,tablefmt="tsv")
-        click.echo(tabulate_data)
-        return tabulate_data
+
+    table_data = get_files_details(files)
+    tabulate_data = tabulate(tabular_data=table_data,headers=TABLE_HEADERS,tablefmt="tsv")
+    click.echo(tabulate_data)
+    return tabulate_data
 
     return None
         # for f in files:
