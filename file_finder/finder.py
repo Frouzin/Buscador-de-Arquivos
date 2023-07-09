@@ -78,8 +78,8 @@ def finder(path, key, value,recursive, copy_to, save):
     report = process_results(files=files, key=key, value=value)
     save_report(save=save,report=report,root=root)
     copy_files(copy_to=copy_to,files=files)
-
-try:
-    finder()
-except FileFinderError as err:
-    click.echo(click.style(err,bg='black',fg='red',italic=True))
+if __name__ == "__main__":
+    try:
+        finder()
+    except FileFinderError as err:
+        click.echo(click.style(err,bg='black',fg='red',italic=True))
